@@ -20,6 +20,13 @@
         </config-file>
 
         <source-file src="src/android/Linphone.java" target-dir="src/labs/akhdani/linphone" />
+        <source-file src="res/raw/incoming_chat.wav" target-dir="res/raw" />
+        <source-file src="res/raw/linphonerc_default" target-dir="res/raw" />
+        <source-file src="res/raw/linphonerc_factory" target-dir="res/raw" />
+        <source-file src="res/raw/lpconfig.xsd" target-dir="res/raw" />
+        <source-file src="res/raw/oldphone_mono.wav" target-dir="res/raw" />
+        <source-file src="res/raw/ringback.wav" target-dir="res/raw" />
+        <source-file src="res/raw/toy_mono.wav" target-dir="res/raw" />
         <source-file src="res/raw/rootca.pem" target-dir="res/raw" />
         <source-file src="libs/linphone.jar" target-dir="libs" />
         <source-file src="libs/armeabi/liblinphone-armeabi.so" target-dir="libs/armeabi" />
@@ -31,6 +38,11 @@
         <js-module src="www/linphone.js" name="linphone">
             <merges target="linphone" />
         </js-module>
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.RECORD_AUDIO" />
+            <uses-permission android:name="android.permission.CAMERA" />
+            <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+        </config-file>
     </platform>
 
     <!-- ios -->
