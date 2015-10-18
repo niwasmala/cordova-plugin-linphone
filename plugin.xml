@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
-        id="labs.akhdani.linphone"
-        version="0.1.0">
+    id="labs.akhdani.linphone"
+    version="1.0.0">
     <name>LinPhone</name>
     <description>A plugin to integrate linphone features to cordova</description>
     <license>MIT</license>
     <keywords>cordova,phonegap,linphone,liblinphone</keywords>
-    <js-module src="www/linphone.js" name="linphone">
-        <merges target="linphone" />
-    </js-module>
+
+    <engines>
+        <engine name="cordova-android" version=">=4.0.0-dev" />
+    </engines>
 
     <!-- android -->
     <platform name="android">
@@ -17,6 +18,19 @@
                 <param name="android-package" value="labs.akhdani.linphone.Linphone" />
             </feature>
         </config-file>
+
+        <source-file src="src/android/Linphone.java" target-dir="src/labs/akhdani/linphone" />
+        <source-file src="res/raw/rootca.pem" target-dir="res/raw" />
+        <source-file src="libs/linphone.jar" target-dir="libs" />
+        <source-file src="libs/armeabi/liblinphone-armeabi.so" target-dir="libs/armeabi" />
+        <source-file src="libs/armeabi-v7a/libffmpeg-linphone-arm.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="libs/armeabi-v7a/liblinphone-armeabi-v7a.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="libs/x86/libffmpeg-linphone-x86.so" target-dir="libs/x86" />
+        <source-file src="libs/x86/liblinphone-x86.so" target-dir="libs/x86" />
+
+        <js-module src="www/linphone.js" name="linphone">
+            <merges target="linphone" />
+        </js-module>
     </platform>
 
     <!-- ios -->
