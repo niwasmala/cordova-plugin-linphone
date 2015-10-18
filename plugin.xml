@@ -20,6 +20,9 @@
         </config-file>
 
         <source-file src="src/android/Linphone.java" target-dir="src/labs/akhdani/linphone" />
+        <source-file src="src/android/LinphoneMiniActivity.java" target-dir="src/labs/akhdani/linphone" />
+        <source-file src="src/android/LinphoneMiniManager.java" target-dir="src/labs/akhdani/linphone" />
+        <source-file src="src/android/LinphoneMiniUtils.java" target-dir="src/labs/akhdani/linphone" />
         <source-file src="res/raw/incoming_chat.wav" target-dir="res/raw" />
         <source-file src="res/raw/linphonerc_default" target-dir="res/raw" />
         <source-file src="res/raw/linphonerc_factory" target-dir="res/raw" />
@@ -42,6 +45,7 @@
             <uses-permission android:name="android.permission.RECORD_AUDIO" />
             <uses-permission android:name="android.permission.CAMERA" />
             <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+            <uses-permission android:name="android.permission.WAKE_LOCK" />
         </config-file>
     </platform>
 

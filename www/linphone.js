@@ -1,11 +1,29 @@
 module.exports = {
-    call: function(num, successCallback, errorCallback) {
+    login: function(username, password, domain, successCallback, errorCallback) {
+        cordova.exec(
+            successCallback,
+            errorCallback,
+            "Linphone",
+            "login",
+            [username, password, domain]
+        );
+    },
+    logout: function(successCallback, errorCallback) {
+        cordova.exec(
+            successCallback,
+            errorCallback,
+            "Linphone",
+            "logout",
+            []
+        );
+    },
+    call: function(address, displayName, successCallback, errorCallback) {
         cordova.exec(
             successCallback,
             errorCallback,
             "Linphone",
             "call",
-            [num]
+            [address, displayName]
         );
     },
     hangup: function(successCallback, errorCallback) {
@@ -17,13 +35,13 @@ module.exports = {
             []
         );
     },
-    toggleVideo: function(isOn, successCallback, errorCallback) {
+    toggleVideo: function(successCallback, errorCallback) {
         cordova.exec(
             successCallback,
             errorCallback,
             "Linphone",
             "toggleVideo",
-            [isOn]
+            []
         );
     }
 };
