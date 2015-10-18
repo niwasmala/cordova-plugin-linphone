@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
+        id="labs.akhdani.linphone"
+        version="0.1.0">
+    <name>LinPhone</name>
+    <description>A plugin to integrate linphone features to cordova</description>
+    <license>MIT</license>
+    <keywords>cordova,phonegap,linphone,liblinphone</keywords>
+    <js-module src="www/linphone.js" name="linphone">
+        <merges target="linphone" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <feature name="Linphone">
+                <param name="android-package" value="labs.akhdani.linphone.Linphone" />
+            </feature>
+        </config-file>
+    </platform>
+
+    <!-- ios -->
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="Linphone">
+                <param name="ios-package" value="Linphone"/>
+            </feature>
+        </config-file>
+        <header-file src="src/ios/Linphone.h"/>
+        <source-file src="src/ios/Linphone.m"/>
+    </platform>
+</plugin>
