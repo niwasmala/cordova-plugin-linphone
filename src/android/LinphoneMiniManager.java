@@ -24,6 +24,7 @@ import java.nio.ByteBuffer;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.linphone.CallManager;
 import org.linphone.LinphonePreferences;
 import org.linphone.LinphoneUtils;
 import org.linphone.core.LinphoneAddress;
@@ -56,16 +57,18 @@ import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration.
 import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
+import android.view.SurfaceView;
 
 /**
  * @author Sylvain Berfini
  */
 public class LinphoneMiniManager implements LinphoneCoreListener {
-	private static LinphoneMiniManager mInstance;
-	private Context mContext;
-	private LinphoneCore mLinphoneCore;
-    private LinphonePreferences mPrefs;
-	private Timer mTimer;
+	public static LinphoneMiniManager mInstance;
+	public static Context mContext;
+	public static LinphoneCore mLinphoneCore;
+    public static LinphonePreferences mPrefs;
+	public static Timer mTimer;
+	public static SurfaceView mCaptureView;
 
 	public LinphoneMiniManager(Context c) {
 		mContext = c;
@@ -83,6 +86,9 @@ public class LinphoneMiniManager implements LinphoneCoreListener {
 			startIterate();
 			mInstance = this;
 	        mLinphoneCore.setNetworkReachable(true); // Let's assume it's true
+
+			mCaptureView = new SurfaceView(mContext);
+
 		} catch (LinphoneCoreException e) {
 		} catch (IOException e) {
 		}
@@ -187,7 +193,7 @@ public class LinphoneMiniManager implements LinphoneCoreListener {
         if(mLinphoneCore.isNetworkReachable()) {
             try {
                 LinphoneCallParams params = mLinphoneCore.createDefaultCallParameters();
-                params.setVideoEnabled(Version.isVideoCapable());
+                params.setVideoEnabled(true);
                 mLinphoneCore.inviteAddressWithParams(lAddress, params);
             } catch (LinphoneCoreException var7) {
                 return;
@@ -219,6 +225,16 @@ public class LinphoneMiniManager implements LinphoneCoreListener {
 
         }
     }
+	public void updateCall() {
+		LinphoneCore lc = mLinphoneCore;
+		LinphoneCall lCall = lc.getCurrentCall();
+		if (lCall == null) {
+			Log.e(new Object[]{"Trying to updateCall while not in call: doing nothing"});
+		} else {
+			LinphoneCallParams params = lCall.getCurrentParamsCopy();
+			lc.updateCall(lCall, (LinphoneCallParams) null);
+		}
+	}
 
 	@Override
 	public void globalState(LinphoneCore lc, GlobalState state, String message) {

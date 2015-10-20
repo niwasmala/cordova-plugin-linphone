@@ -26,6 +26,15 @@ module.exports = {
             [address, displayName]
         );
     },
+    videocall: function(address, displayName, successCallback, errorCallback) {
+        cordova.exec(
+            successCallback,
+            errorCallback,
+            "Linphone",
+            "videocall,
+            [address, displayName]
+        );
+    },
     hangup: function(successCallback, errorCallback) {
         cordova.exec(
             successCallback,
