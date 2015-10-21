@@ -219,12 +219,38 @@ public class LinphoneMiniManager implements LinphoneCoreListener {
         return false;
     }
 
+    public boolean toggleEnableSpeaker() {
+        if (mLinphoneCore.isIncall()) {
+			boolean enabled = !mLinphoneCore.isSpeakerEnabled();
+			mLinphoneCore.enableSpeaker(enabled);
+            return enabled;
+        }
+        return false;
+    }
+
+    public boolean toggleMute() {
+        if (mLinphoneCore.isIncall()) {
+			boolean enabled = !mLinphoneCore.isMicMuted();
+			mLinphoneCore.muteMic(enabled);
+			return enabled;
+        }
+        return false;
+    }
+
+    public void adjustVolume(int vol) {
+		
+    }
+
     public void enableCamera(LinphoneCall call, boolean enable) {
         if (call != null) {
             call.enableCamera(enable);
-
-        }
+		}
     }
+
+    public void sendDtmf(char number) {
+		mLinphoneCore.sendDtmf(number);
+    }
+
 	public void updateCall() {
 		LinphoneCore lc = mLinphoneCore;
 		LinphoneCall lCall = lc.getCurrentCall();

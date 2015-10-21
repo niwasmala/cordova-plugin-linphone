@@ -52,5 +52,32 @@ module.exports = {
             "toggleVideo",
             []
         );
+    },
+    toggleSpeaker: function(successCallback, errorCallback) {
+        cordova.exec(
+            successCallback,
+            errorCallback,
+            "Linphone",
+            "toggleSpeaker",
+            []
+        );
+    },
+    sendDtmf: function(number, successCallback, errorCallback) {
+        cordova.exec(
+            successCallback,
+            errorCallback,
+            "Linphone",
+            "sendDtmf",
+            [number]
+        );
+    },
+    toogleMute: function(successCallback, errorCallback) {
+        cordova.exec(
+            successCallback,
+            errorCallback,
+            "Linphone",
+            "toogleMute",
+            [number]
+        );
     }
 };

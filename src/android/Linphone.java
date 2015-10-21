@@ -79,6 +79,15 @@ public class Linphone extends CordovaPlugin {
         }else if(action.equals("toggleVideo")){
             toggleVideo(callbackContext);
             return true;
+        }else if(action.equals("toggleSpeaker")){
+            toggleSpeaker(callbackContext);
+            return true;
+        }else if(action.equals("toggleMute")){
+            toggleMute(callbackContext);
+            return true;
+        }else if(action.equals("sendDtmf")){
+            sendDtmf(args.getString(0), callbackContext);
+            return true;
         }
         return false;
     }
@@ -180,6 +189,42 @@ public class Linphone extends CordovaPlugin {
             callbackContext.success(isenabled ? 1 : 0);
         }catch (Exception e){
             Log.d("toggleVideo error", e.getMessage());
+            callbackContext.error(e.getMessage());
+        }
+    }
+
+    public static synchronized void toggleSpeaker(final CallbackContext callbackContext) {
+        try{
+            Log.d("toggleSpeaker");
+            boolean isenabled = mLinphoneManager.toggleEnableSpeaker();
+            Log.d("toggleSpeaker sukses",isenabled);
+            callbackContext.success(isenabled ? 1 : 0);
+        }catch (Exception e){
+            Log.d("toggleSpeaker error", e.getMessage());
+            callbackContext.error(e.getMessage());
+        }
+    }
+
+    public static synchronized void toggleMute(final CallbackContext callbackContext) {
+        try{
+            Log.d("toggleMute");
+            boolean isenabled = mLinphoneManager.toggleMute();
+            Log.d("toggleMute sukses",isenabled);
+            callbackContext.success(isenabled ? 1 : 0);
+        }catch (Exception e){
+            Log.d("toggleMute error", e.getMessage());
+            callbackContext.error(e.getMessage());
+        }
+    }
+
+    public static synchronized void sendDtmf(final String number, final CallbackContext callbackContext) {
+        try{
+            Log.d("sendDtmf");
+            mLinphoneManager.sendDtmf(number.charAt(0));
+            Log.d("sendDtmf sukses",number);
+            callbackContext.success();
+        }catch (Exception e){
+            Log.d("sendDtmf error", e.getMessage());
             callbackContext.error(e.getMessage());
         }
     }
