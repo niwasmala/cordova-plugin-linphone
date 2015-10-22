@@ -31,7 +31,7 @@ module.exports = {
             successCallback,
             errorCallback,
             "Linphone",
-            "videocall,
+            "videocall",
             [address, displayName]
         );
     },
@@ -62,21 +62,21 @@ module.exports = {
             []
         );
     },
-    sendDtmf: function(number, successCallback, errorCallback) {
-        cordova.exec(
-            successCallback,
-            errorCallback,
-            "Linphone",
-            "sendDtmf",
-            [number]
-        );
-    },
     toogleMute: function(successCallback, errorCallback) {
         cordova.exec(
             successCallback,
             errorCallback,
             "Linphone",
             "toogleMute",
+            []
+        );
+    },
+    sendDtmf: function(number, successCallback, errorCallback) {
+        cordova.exec(
+            successCallback,
+            errorCallback,
+            "Linphone",
+            "sendDtmf",
             [number]
         );
     }
