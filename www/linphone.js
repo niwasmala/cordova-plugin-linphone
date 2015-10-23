@@ -62,12 +62,12 @@ module.exports = {
             []
         );
     },
-    toogleMute: function(successCallback, errorCallback) {
+    toggleMute: function(successCallback, errorCallback) {
         cordova.exec(
             successCallback,
             errorCallback,
             "Linphone",
-            "toogleMute",
+            "toggleMute",
             []
         );
     },
