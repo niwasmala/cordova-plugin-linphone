@@ -1,183 +1,256 @@
+//
+//  LinPhoneGap.m
+//
+//  Created by John Roy on 04/01/2014
+//  Some code copied from linphone under GPL. See LICENSE.gpl and linphone.org
+//  Copyright (c) 2014 BabelRoom. All rights reserved.
+
 #import "Linphone.h"
-#import "LinphoneManager.h"
 #import <Cordova/CDV.h>
 
-@implementation Linphone
+/* in order to use this plugin you will need to add linphone libraries to your Xcode project. This is
+non-trivial and requires experience with Xcode and knowledge of how to download, build and integrate third-party libraries.
+Change the 1 below to 0 if you wish to integrate this plugin without including liblinphone.
+*/
+#if 1
 
-@synthesize lm;
-@synthesize lc;
+#import "LinphoneManager.h"
+#import "lpconfig.h"
 
-- (void)login:(CDVInvokedUrlCommand*)command
+struct _ConfigCtx {
+    LpConfig *lpConfig;
+    const char *section;
+};
+void iterate_config_entry(const char *entry, void *ctx)
 {
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    NSString* username = [command.arguments objectAtIndex:0];
-    NSString* password = [command.arguments objectAtIndex:1];
-    NSString* domain = [command.arguments objectAtIndex:2];
-    
-    lc = [LinphoneManager getLc];
-    LinphoneProxyConfig *proxyCfg = linphone_core_create_proxy_config(lc);
-    NSString *server_address = domain;
-    
-    char normalizedUserName[256];
-    linphone_proxy_config_normalize_number(proxyCfg, [username UTF8String], normalizedUserName,
-                                           sizeof(normalizedUserName));
-    
-    const char *identity = linphone_proxy_config_get_identity(proxyCfg);
-    if (!identity || !*identity)
-        identity = "sip:user@example.com";
-    
-    LinphoneAddress *linphoneAddress = linphone_address_new(identity);
-    linphone_address_set_username(linphoneAddress, normalizedUserName);
-    
-    if (domain && [domain length] != 0) {
-        // when the domain is specified (for external login), take it as the server address
-        linphone_proxy_config_set_server_addr(proxyCfg, [server_address UTF8String]);
-        linphone_address_set_domain(linphoneAddress, [domain UTF8String]);
+    struct _ConfigCtx *pCtx = (struct _ConfigCtx *)ctx;
+    NSLog(@"%s::%s",pCtx->section,entry);
+}
+void iterate_config_sections(const char *section, void *ctx)
+{
+    struct _ConfigCtx *pCtx = (struct _ConfigCtx *)ctx;
+    pCtx->section = section;
+    lp_config_for_each_entry(pCtx->lpConfig, section, iterate_config_entry, ctx);
+}
+void iterate_codecs(const char *type, const MSList *codecs)
+{
+	LinphoneCore *lc=[LinphoneManager getLc];
+	const MSList *elem=codecs;
+	for(;elem!=NULL;elem=elem->next){
+		PayloadType *pt=(PayloadType*)elem->data;
+        int value = -1;
+		NSString *pref=[LinphoneManager getPreferenceForCodec:pt->mime_type withRate:pt->clock_rate];
+		if (pref)
+            value = linphone_core_payload_type_enabled(lc,pt)?1:0;
+        NSLog(@"%s: %s:%d (%@) = %d", type, pt->mime_type, pt->clock_rate, pref?pref:@"___", value);
+	}
+}
+
+@implementation LinPhoneGap
+
+- (void)pluginInitialize
+{
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onOrientationDidChange:) name:
+UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(callUpdateEvent:)
+                                                 name:kLinphoneCallUpdate
+                                               object:nil];
+    if(![LinphoneManager isLcReady]) {
+        [[LinphoneManager instance]	startLibLinphone];
     }
-    
-    char *extractedAddres = linphone_address_as_string_uri_only(linphoneAddress);
-    
-    LinphoneAddress *parsedAddress = linphone_address_new(extractedAddres);
-    ms_free(extractedAddres);
-    
-    char *c_parsedAddress = linphone_address_as_string_uri_only(parsedAddress);
-    
-    linphone_proxy_config_set_identity(proxyCfg, c_parsedAddress);
-    
-    linphone_address_destroy(parsedAddress);
-    ms_free(c_parsedAddress);
-    
-    LinphoneAuthInfo *info = linphone_auth_info_new([username UTF8String], NULL, [password UTF8String], NULL, NULL,
-                                                    linphone_proxy_config_get_domain(proxyCfg));
-    lm = [LinphoneManager instance];
-    [lm configurePushTokenForProxyConfig:proxyCfg];
-    [lm removeAllAccounts];
-    
-    linphone_proxy_config_enable_register(proxyCfg, true);
-    linphone_core_add_auth_info(lc, info);
-    linphone_core_add_proxy_config(lc, proxyCfg);
-    linphone_core_set_default_proxy_config(lc, proxyCfg);
-    
-    call = NULL;
-    
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-@end
+    if([LinphoneManager isLcReady]) {
+        LinphoneCore* lc = [LinphoneManager getLc];
 
-- (void)logout:(CDVInvokedUrlCommands*)command
-{
-    CDVPluginResult* pluginResult = nil;
-    linphone_core_clear_all_auth_info([LinphoneManager getLc]);
-    linphone_core_clear_proxy_config([LinphoneManager getLc]);
-    
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-@end
+        [self checkOrientation];
 
-- (void)call:(CDVInvokedUrlCommands*)command
-{
-    CDVPluginResult* pluginResult = nil;
-    NSString* address = [command.arguments objectAtIndex:0];
-    NSString* displayName = [command.arguments objectAtIndex:1];
-    
-    LinphoneAddress* addr = linphone_core_interpret_url(lc, address);
-    call = linphone_core_invite_address(lc, addr);
-    
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-@end
+        struct _ConfigCtx ctx;
+        ctx.lpConfig = linphone_core_get_config(lc);
+        lp_config_for_each_section(ctx.lpConfig, iterate_config_sections, &ctx);
+        iterate_codecs("Audio", linphone_core_get_audio_codecs(lc));
+        iterate_codecs("Video", linphone_core_get_video_codecs(lc));
 
-- (void)videocall:(CDVInvokedUrlCommands*)command
-{
-    CDVPluginResult* pluginResult = nil;
-    NSString* address = [command.arguments objectAtIndex:0];
-    NSString* displayName = [command.arguments objectAtIndex:1];
-    
-    if(call == NULL){
-        call = linphone_core_invite(lc, address);
-        linphone_call_ref(call);
+        CGRect rect = [[UIScreen mainScreen] bounds];
+        CGRect rectPreview = CGRectMake(rect.size.width-180, rect.size.height-240, 150, 200);
+        UIView* myView = [[UIView alloc] initWithFrame:rect];
+        myView.backgroundColor = [UIColor whiteColor];
+        UIView* myPreview = [[UIView alloc] initWithFrame:rectPreview];
+
+        [self.webView.superview insertSubview:myView belowSubview:self.webView];
+        [self.webView.superview insertSubview:myPreview aboveSubview:myView];
+        [self.webView setOpaque:NO];
+        self.webView.backgroundColor = [UIColor clearColor];
+        linphone_core_set_native_video_window_id(lc, (unsigned long)myView);
+        linphone_core_set_native_preview_window_id(lc, (unsigned long)myPreview);
+        linphone_core_enable_video_preview(lc,1);   // this is necessary at present until we fix/set core config
     }
-    
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-@end
 
-- (void)hangup:(CDVInvokedUrlCommands*)command
+    [super pluginInitialize];
+}
+
+- (void)log:(CDVInvokedUrlCommand*)command
+{
+    id message = [command.arguments objectAtIndex:0];
+    NSLog(@"%@",message);
+}
+
+- (void)call:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
-    
-    if(call && linphone_call_get_state(call) != LinphoneCallEnd){
-        linphone_core_terminate_call(lc, call);
-        linphone_call_unref(call);
-        call = NULL;
-    }
-    
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-@end
-
-- (void)toggleVideo:(CDVInvokedUrlCommands*)command
-{
-    CDVPluginResult* pluginResult = nil;
-    
-    if (call != NULL && linphone_call_params_get_used_video_codec(linphone_call_get_current_params(call))) {
-        if(isenabled){
-            
-        }else{
-            linphone_call_set_next_video_frame_decoded_callback(call, hideSpinner, (__bridge void *)(self));
+    NSString* sipaddr = [command.arguments objectAtIndex:0];
+    if([LinphoneManager isLcReady]) {
+        LinphoneCore* lc = [LinphoneManager getLc];
+        if (!linphone_core_get_current_call(lc)) {  /* only 1 call at a time */
+            [[LinphoneManager instance] call:sipaddr displayName:@"BabelRoom SIP" transfer:FALSE];
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         }
     }
-    
+    if (pluginResult==nil) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+    }
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
-@end
 
-- (void)toggleSpeaker:(CDVInvokedUrlCommands*)command
+- (void)hangup:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
-    
-    if (call != NULL && linphone_call_get_state(call) != LinphoneCallEnd){
-        if(enable) {
-            UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
-            AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute
-                                     , sizeof (audioRouteOverride)
-                                     , &audioRouteOverride);
-            bluetoothEnabled = FALSE;
-        } else {
-            UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_None;
-            AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute
-                                     , sizeof (audioRouteOverride)
-                                     , &audioRouteOverride);
+    if([LinphoneManager isLcReady]) {
+        LinphoneCore* lc = [LinphoneManager getLc];
+        LinphoneCall* currentcall = linphone_core_get_current_call(lc);
+        if(currentcall != NULL) { // In a call
+            linphone_core_terminate_call(lc, currentcall);
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        }
+    } else {
+        [LinphoneLogger logc:LinphoneLoggerWarning format:"Cannot trigger hangup button: Linphone core not ready"];
+    }
+    if (pluginResult==nil) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+    }
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)callUpdateEvent: (NSNotification*) notif {
+    LinphoneCall *call = [[notif.userInfo objectForKey: @"call"] pointerValue];
+    LinphoneCallState state = [[notif.userInfo objectForKey: @"state"] intValue];
+    // Fake call update
+    if(call == NULL) {
+        return;
+    }
+
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"hotdog"];
+    NSMutableString *jsStatement = [NSMutableString stringWithString:@"window.plugins.LinPhoneGap._phoneEvent({_:0"];
+    switch (state) {
+        case LinphoneCallIdle:                  /**<Initial call state */
+        case LinphoneCallIncomingReceived:      /**<This is a new incoming call */
+            return;
+        case LinphoneCallOutgoingInit:          /**<An outgoing call is started */
+            [jsStatement appendString:@",canCall:false"];
+            break;
+        case LinphoneCallOutgoingProgress:      /**<An outgoing call is in progress */
+        case LinphoneCallOutgoingRinging:       /**<An outgoing call is ringing at remote end */
+        case LinphoneCallOutgoingEarlyMedia:    /**<An outgoing call is proposed early media */
+        case LinphoneCallConnected:             /**<Connected, the call is answered */
+            return;
+        case LinphoneCallStreamsRunning:        /**<The media streams are established and running*/
+            [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+            [jsStatement appendString:@",canHangup:true"];
+            if (linphone_call_params_video_enabled(linphone_call_get_current_params(call))) {
+                [jsStatement appendString:@",canStopVideo:true"];
+                [jsStatement appendString:@",canStartVideo:false"];
+                }
+            else {
+                [jsStatement appendString:@",canStartVideo:true"];
+                [jsStatement appendString:@",canStopVideo:false"];
+                }
+            break;
+        case LinphoneCallPausing:               /**<The call is pausing at the initiative of local end */
+        case LinphoneCallPaused:                /**< The call is paused, remote end has accepted the pause */
+        case LinphoneCallResuming:              /**<The call is being resumed by local end*/
+        case LinphoneCallRefered:               /**<The call is being transfered to another party, resulting in a new outgoing call to follow immediately*/
+        case LinphoneCallError:                 /**<The call encountered an error*/
+        case LinphoneCallEnd:                   /**<The call ended normally*/
+        case LinphoneCallPausedByRemote:        /**<The call is paused by remote end*/
+        case LinphoneCallUpdatedByRemote:       /**<The call's parameters change is requested by remote end, used for example when video is added by remote */
+        case LinphoneCallIncomingEarlyMedia:    /**<We are proposing early media to an incoming call */
+        case LinphoneCallUpdating:              /**<A call update has been initiated by us */
+            return;
+        case LinphoneCallReleased: ;              /**< The call object is no more retained by the core */
+            [jsStatement appendString:@",canCall:true,canHangup:false,canStartVideo:false,canStopVideo:false"];
+            [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
+            break;
+    }
+/*    [jsStatement appendFormat:@",_state:'%s'", linphone_call_state_to_string(state)]; -- good for debugging, reference */
+    [jsStatement appendString:@"})"];
+    [super writeJavascript:jsStatement];
+}
+
+- (void)toggleVideo:(CDVInvokedUrlCommand*)command
+{
+    BOOL onOff = [[command.arguments objectAtIndex:0] boolValue];
+    CDVPluginResult* pluginResult = nil;
+    if([LinphoneManager isLcReady]) {
+        LinphoneCore* lc = [LinphoneManager getLc];
+        if (linphone_core_video_enabled(lc)) {
+            LinphoneCall* call = linphone_core_get_current_call(lc);
+            if (call) {
+                LinphoneCallAppData* callAppData = (__bridge LinphoneCallAppData*)linphone_call_get_user_pointer(call);
+                callAppData->videoRequested=onOff; /* will be used later to notify user if video was not activated because of the linphone core */
+                LinphoneCallParams* call_params =  linphone_call_params_copy(linphone_call_get_current_params(call));
+                linphone_call_params_enable_video(call_params, onOff);
+                linphone_core_update_call(lc, call, call_params);
+                linphone_call_params_destroy(call_params);
+                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+            } else {
+                [LinphoneLogger logc:LinphoneLoggerWarning format:"Cannot toggle video, because no current call"];
+            }
         }
     }
-    
+    if (pluginResult==nil) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+    }
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
+
+- (void) checkOrientation
+{
+    UIInterfaceOrientation co = [[UIApplication sharedApplication] statusBarOrientation];
+    NSLog(@"orientation change - %d %d", 0, co);
+    int nr = -1;
+    switch (co) {
+        case UIInterfaceOrientationPortrait:
+            nr = 0;
+            break;
+        case UIInterfaceOrientationPortraitUpsideDown:
+            nr = 180;
+            break;
+        case UIInterfaceOrientationLandscapeRight:
+            nr = 270;
+            break;
+        case UIInterfaceOrientationLandscapeLeft:
+            nr = 90;
+            break;
+    }
+    if (nr>=0 && [LinphoneManager isLcReady]) {
+        int or = linphone_core_get_device_rotation([LinphoneManager getLc]);
+        if (nr!=or) {
+            LinphoneCore* lc = [LinphoneManager getLc];
+            NSLog(@"rotation update - %d %d",nr,or);
+            linphone_core_set_device_rotation(lc, nr);
+            LinphoneCall* call = linphone_core_get_current_call([LinphoneManager getLc]);
+            if (call && linphone_call_params_video_enabled(linphone_call_get_current_params(call))) {
+                //Orientation has changed, must call update call
+                linphone_core_update_call([LinphoneManager getLc], call, NULL);
+            }
+        }
+    }
+}
+
+- (void) onOrientationDidChange: (NSNotification *) notif
+{
+    [self checkOrientation];
+}
+
 @end
 
-- (void)toggleMute:(CDVInvokedUrlCommands*)command
-{
-    CDVPluginResult* pluginResult = nil;
-    NSString* isenabled = [command.arguments objectAtIndex:0]
-    
-    if(call && linphone_call_get_state(call) != LinphoneCallEnd){
-        linphone_core_mic_enabled(lc, isenabled);
-    }
-    
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-@end
-
-- (void)sendDtmf:(CDVInvokedUrlCommands*)command
-{
-    CDVPluginResult* pluginResult = nil;
-    NSString* dtmf = [command.arguments objectAtIndex:0];
-    
-    if(call && linphone_call_get_state(call) != LinphoneCallEnd){
-        linphone_call_send_dtmf(lc, dtmf);
-    }
-    
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-@end
+#endif /* have included linphone libraries in project */

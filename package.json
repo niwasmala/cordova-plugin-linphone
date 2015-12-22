@@ -5,7 +5,8 @@
   "cordova": {
     "platforms": [
       "android",
-      "ios"
+      "ios",
+      "wp8"
     ]
   },
   "repository": {
