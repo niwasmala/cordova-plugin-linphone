@@ -1,17 +1,25 @@
-//
-//  LinPhoneGap.h
-//
-//  Created by John Roy on 04/01/2014
-//  Some code copied from linphone under GPL. See LICENSE.gpl and linphone.org
-//  Copyright (c) 2014 BabelRoom. All rights reserved.
-
 #import <Cordova/CDV.h>
+#import "LinphoneManager.h"
+#include "linphone/linphonecore.h"
 
-@interface LinPhoneGap : CDVPlugin
+@interface Linphone : CDVPlugin{
+    LinphoneManager *lm;
+    LinphoneCore *lc;
+    LinphoneCall *call;
+}
 
-- (void)log:(CDVInvokedUrlCommand*)command;
+@property (nonatomic) LinphoneManager *lm;
+@property (nonatomic) LinphoneCore *lc;
+@property (nonatomic) LinphoneCall *call;
+
+- (void)login:(CDVInvokedUrlCommand*)command;
+- (void)logout:(CDVInvokedUrlCommand*)command;
 - (void)call:(CDVInvokedUrlCommand*)command;
+- (void)videocall:(CDVInvokedUrlCommand*)command;
 - (void)hangup:(CDVInvokedUrlCommand*)command;
 - (void)toggleVideo:(CDVInvokedUrlCommand*)command;
+- (void)toggleSpeaker:(CDVInvokedUrlCommand*)command;
+- (void)toggleMute:(CDVInvokedUrlCommand*)command;
+- (void)sendDtmf:(CDVInvokedUrlCommand*)command;
 
 @end
