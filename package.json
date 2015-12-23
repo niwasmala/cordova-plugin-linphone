@@ -28,6 +28,10 @@
     {
       "name": "cordova-ios",
       "version": ">=4.0.0-dev"
+    },
+    {
+      "name": "cordova-wp",
+      "version": ">=4.0.0-dev"
     }
   ],
   "author": "Apache Software Foundation",

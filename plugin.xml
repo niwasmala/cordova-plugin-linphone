@@ -64,6 +64,100 @@
         </config-file>
         <header-file src="src/ios/Linphone.h"/>
         <source-file src="src/ios/Linphone.m"/>
+
+        <source-file src="libs/apple-darwin/include/belle-sip/auth-helper.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/belle-sdp.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/belle-sip.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/bodyhandler.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/defs.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/dialog.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/dict.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/generic-uri.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/headers.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/http-listener.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/http-message.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/http-provider.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/list.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/listener.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/listingpoint.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/mainloop.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/message.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/object.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/parameters.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/provider.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/refresher.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/resolver.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/sip-uri.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/sipstack.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/transaction.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/types.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/utils.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/belle-sip/wakelock.h" target-dir="liblinphone-sdk/apple-darwin/include/belle-sip" />
+        <source-file src="libs/apple-darwin/include/" target-dir="liblinphone-sdk/apple-darwin/include" />
+
+        <source-file src="libs/apple-darwin/lib/mediastreamer/plugins/libmsamr.a" target-dir="liblinphone-sdk/apple-darwin/lib/mediastreamer/plugins" />
+        <source-file src="libs/apple-darwin/lib/mediastreamer/plugins/libmsbcg729.a" target-dir="liblinphone-sdk/apple-darwin/lib/mediastreamer/plugins" />
+        <source-file src="libs/apple-darwin/lib/mediastreamer/plugins/libmsopenh264.a" target-dir="liblinphone-sdk/apple-darwin/lib/mediastreamer/plugins" />
+        <source-file src="libs/apple-darwin/lib/mediastreamer/plugins/libmssilk.a" target-dir="liblinphone-sdk/apple-darwin/lib/mediastreamer/plugins" />
+        <source-file src="libs/apple-darwin/lib/mediastreamer/plugins/libmswebrtc.a" target-dir="liblinphone-sdk/apple-darwin/lib/mediastreamer/plugins" />
+        <source-file src="libs/apple-darwin/lib/mediastreamer/plugins/libmsx264.a" target-dir="liblinphone-sdk/apple-darwin/lib/mediastreamer/plugins" />
+        <source-file src="libs/apple-darwin/lib/libantlr3c.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libavcodec.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libavutil.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libbcg729.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libbellesip.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libbzrtp.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libcunit.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libgsm.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/liblinphone.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/liblinphonetester.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libmediastreamer_base.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libmediastreamer_voip.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libNinePatch.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libopencore-amrnb.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libopencore-amrwb.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libopenh264.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libopus.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libortp.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libpolarssl.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libsppex.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libsppexdsp.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libsrtp.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libswresample.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libswscale.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libtunnel.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libvo-amrwbenc.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libvpx.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libx264.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/libXMLRPC.a" target-dir="liblinphone-sdk/apple-darwin/lib" />
+        <source-file src="libs/apple-darwin/lib/" target-dir="liblinphone-sdk/apple-darwin/lib" />
+
+        <source-file src="libs/apple-darwin/share/cmake/Modules/FindPolarSSL.cmake" target-dir="liblinphone-sdk/apple-darwin/share/cmake/Modules" />
+        <source-file src="libs/apple-darwin/share/CUnit/CUnit-List.dtd" target-dir="liblinphone-sdk/apple-darwin/share/CUnit" />
+        <source-file src="libs/apple-darwin/share/CUnit/CUnit-List.xsl" target-dir="liblinphone-sdk/apple-darwin/share/CUnit" />
+        <source-file src="libs/apple-darwin/share/CUnit/CUnit-Run.dtd" target-dir="liblinphone-sdk/apple-darwin/share/CUnit" />
+        <source-file src="libs/apple-darwin/share/CUnit/CUnit-Run.xsl" target-dir="liblinphone-sdk/apple-darwin/share/CUnit" />
+        <source-file src="libs/apple-darwin/share/CUnit/Memory-Dump.dtd" target-dir="liblinphone-sdk/apple-darwin/share/CUnit" />
+        <source-file src="libs/apple-darwin/share/CUnit/Memory-Dump.xsl" target-dir="liblinphone-sdk/apple-darwin/share/CUnit" />
+        <source-file src="libs/apple-darwin/share/images/nowebcamCIF.jpg" target-dir="liblinphone-sdk/apple-darwin/share/images" />
+        <source-file src="libs/apple-darwin/share/java/antlr3.jar" target-dir="liblinphone-sdk/apple-darwin/share/java" />
+        <source-file src="libs/apple-darwin/share/linphone/rootca.pem" target-dir="liblinphone-sdk/apple-darwin/share/linphone" />
+        <source-file src="libs/apple-darwin/share/man/man3/CUnit.3" target-dir="liblinphone-sdk/apple-darwin/share/man" />
+        <source-file src="libs/apple-darwin/share/sounds/linphone/hello8000.wav" target-dir="liblinphone-sdk/apple-darwin/share/sounds/linphone" />
+        <source-file src="libs/apple-darwin/share/sounds/linphone/hello16000.wav" target-dir="liblinphone-sdk/apple-darwin/share/sounds/linphone" />
+        <source-file src="libs/apple-darwin/share/sounds/linphone/incoming_chat.wav" target-dir="liblinphone-sdk/apple-darwin/share/sounds/linphone" />
+        <source-file src="libs/apple-darwin/share/sounds/linphone/ringback.wav" target-dir="liblinphone-sdk/apple-darwin/share/sounds/linphone" />
+        <source-file src="libs/apple-darwin/share/sounds/linphone/rings/bigben.wav" target-dir="liblinphone-sdk/apple-darwin/share/sounds/linphone/rings" />
+        <source-file src="libs/apple-darwin/share/sounds/linphone/rings/oldphone.wav" target-dir="liblinphone-sdk/apple-darwin/share/sounds/linphone/rings" />
+        <source-file src="libs/apple-darwin/share/sounds/linphone/rings/oldphone-mono.wav" target-dir="liblinphone-sdk/apple-darwin/share/sounds/linphone/rings" />
+        <source-file src="libs/apple-darwin/share/sounds/linphone/rings/oldphone-mono-30s.wav" target-dir="liblinphone-sdk/apple-darwin/share/sounds/linphone/rings" />
+        <source-file src="libs/apple-darwin/share/sounds/linphone/rings/orig.wav" target-dir="liblinphone-sdk/apple-darwin/share/sounds/linphone/rings" />
+        <source-file src="libs/apple-darwin/share/sounds/linphone/rings/rock.wav" target-dir="liblinphone-sdk/apple-darwin/share/sounds/linphone/rings" />
+        <source-file src="libs/apple-darwin/share/sounds/linphone/rings/sweet.wav" target-dir="liblinphone-sdk/apple-darwin/share/sounds/linphone/rings" />
+        <source-file src="libs/apple-darwin/share/sounds/linphone/rings/synth.wav" target-dir="liblinphone-sdk/apple-darwin/share/sounds/linphone/rings" />
+        <source-file src="libs/apple-darwin/share/sounds/linphone/rings/tapping.wav" target-dir="liblinphone-sdk/apple-darwin/share/sounds/linphone/rings" />
+        <source-file src="libs/apple-darwin/share/sounds/linphone/rings/toy-mono.wav" target-dir="liblinphone-sdk/apple-darwin/share/sounds/linphone/rings" />
+        <source-file src="libs/apple-darwin/share/" target-dir="liblinphone-sdk/apple-darwin/share" />
     </platform>
 
     <!-- wp8 -->

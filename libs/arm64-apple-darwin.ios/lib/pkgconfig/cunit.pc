@@ -1,0 +1,10 @@
+prefix=/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/arm64-apple-darwin.ios
+exec_prefix=/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/arm64-apple-darwin.ios/bin
+libdir=/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/arm64-apple-darwin.ios/lib
+includedir=/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/arm64-apple-darwin.ios/include
+
+Name: CUnit
+Description: C Unit Testing Framework
+Version: 2.1-2-
+Libs: -L/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/arm64-apple-darwin.ios/lib -lcunit
+Cflags: -I/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/arm64-apple-darwin.ios/include

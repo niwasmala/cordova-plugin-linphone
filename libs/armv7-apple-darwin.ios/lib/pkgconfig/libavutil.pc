@@ -1,0 +1,14 @@
+prefix=/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/armv7-apple-darwin.ios
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libavutil
+Description: FFmpeg utility library
+Version: 52.38.100
+Requires: 
+Requires.private: 
+Conflicts:
+Libs: -L${libdir} -lavutil -lm
+Libs.private: 
+Cflags: -I${includedir}

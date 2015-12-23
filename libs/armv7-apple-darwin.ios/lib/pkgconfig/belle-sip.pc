@@ -1,0 +1,12 @@
+# This is a comment
+prefix=/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/armv7-apple-darwin.ios
+exec_prefix=/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/armv7-apple-darwin.ios/bin
+includedir=/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/armv7-apple-darwin.ios/include
+
+Name: belle-sip 
+Description: A c based implementation of the SIP (RFC 3261)  telephony protocol 
+Requires.private:  
+Version: 1.4.2
+Libs: -L/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/armv7-apple-darwin.ios/lib -lbellesip
+Libs.private: -L/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/armv7-apple-darwin.ios/lib -lantlr3c -L/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/armv7-apple-darwin.ios/lib -lpolarssl -ldl
+Cflags: -I/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/armv7-apple-darwin.ios/include 

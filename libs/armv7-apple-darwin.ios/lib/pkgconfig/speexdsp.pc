@@ -1,0 +1,15 @@
+# libspeexdsp pkg-config source file
+
+prefix=/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/armv7-apple-darwin.ios
+exec_prefix=/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/armv7-apple-darwin.ios/bin
+libdir=/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/armv7-apple-darwin.ios/lib
+includedir=/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/armv7-apple-darwin.ios/include
+
+Name: speexdsp
+Description: Speexdsp is a speech processing library that goes along with the Speex codec
+Version: 1.2rc1
+Requires: 
+Conflicts:
+Libs: -L/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/armv7-apple-darwin.ios/lib -lspeexdsp
+Libs.private: -lm
+Cflags: -I/Users/macbookpro/Documents/Tutor/Linphone/belledonn/linphone-iphone/liblinphone-sdk/armv7-apple-darwin.ios/include
